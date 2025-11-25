@@ -11,9 +11,9 @@ function SitAnywhere_Cursor:create(x, y, z, north, sprite)
     if not pl:isAlive() then return end
     ISTimedActionQueue.clear(pl)
     local sq = getWorld():getCell():getGridSquare(x, y, z)
-    if luautils.walkAdj(pl, sq) then
-        ISTimedActionQueue.add(ISWalkToTimedAction:new(pl, sq));
-    end
+
+    ISTimedActionQueue.add(ISWalkToTimedAction:new(pl, sq));
+
     ISTimedActionQueue.add(SitAnywhere_Action:new(pl, self.facing))
 end
 

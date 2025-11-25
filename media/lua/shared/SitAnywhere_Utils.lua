@@ -41,7 +41,7 @@ function SitAnywhere.getTurnVar(pl)
     SitAnywhere.td = SitAnywhere.td or pl:getTurnDelta()
     return SitAnywhere.td
 end
-
+--[[ 
 function SitAnywhere.dbg(pl)
 	pl = pl or getPlayer()
 	if not pl then return end
@@ -51,7 +51,7 @@ function SitAnywhere.dbg(pl)
 	local s3 = pl:getVariableString("IsSittingInChair")
 	local msg = 'SittingToggleStart:  '..tostring(s1) ..'\nSittingToggleLoop:  '..tostring(s2) ..'\nIsSittingInChair:  '..tostring(s3)
     return msg
-end
+end ]]
 
 function SitAnywhere.setTurnVar(pl, isStop)
     pl = pl or getPlayer()
@@ -72,15 +72,19 @@ function SitAnywhere.disabler(pl)
         if tostring(state) == 'PlayerSitOnGroundState' and pl:getVariableString("IsSittingInChair") ~= nil then
            -- pl:setBlockMovement(true)
             --pl:setIgnoreInputsForDirection(true);
-            pl:nullifyAiming()
+            --pl:nullifyAiming()
             isStop = true
+            if getCore():getDebug() then 
+                local msg = SitAnywhere.dbg(pl)
+                pl:setHaloNote(tostring(cls)..'\n'..tostring(SitAnywhere.dbg(pl)),150,250,150,300) 
+            end	
         else
             pl:setVariable("forceGetUp", true)
             --pl:setIgnoreInputsForDirection(false);
             --pl:setBlockMovement(false)
 
         end
-        SitAnywhere.setTurnVar(pl, isStop)
+        --SitAnywhere.setTurnVar(pl, isStop)
     end
 end
 --[[ 
@@ -89,24 +93,26 @@ end
     pl:setIgnoreInputsForDirection(false);
     pl:setBlockMovement(false)
  ]]
+--[[ 
 Events.OnPlayerUpdate.Remove(SitAnywhere.disabler)
 Events.OnPlayerUpdate.Add(SitAnywhere.disabler)
-
-local ticks = 0
+ ]]
 function SitAnywhere.getState(pl)
     pl = pl or getPlayer()
     local s = tostring(pl:getCurrentState())
     local cls = s:match("([^@]+)"):match("([^.]+)$")
     --print(cls)
+
     if getCore():getDebug() then 
-        ticks = ticks + 1
-        if ticks % 10 == 0 then
-            local msg = SitAnywhere.dbg(pl)
-            pl:setHaloNote(tostring(cls)..'\n'..tostring(SitAnywhere.dbg(pl)),150,250,150,300) 
-        end
+        local msg = SitAnywhere.dbg(pl)
+        pl:setHaloNote(tostring(cls)..'\n'..tostring(SitAnywhere.dbg(pl)),150,250,150,300) 
     end	
+
     return cls or nil
 end
+
+
+
 
 function SitAnywhere.RequireAdmminSetup()
     return SandboxVars.SitAnywhere.RequireAdmminSetup
