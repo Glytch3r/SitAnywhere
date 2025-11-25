@@ -1,0 +1,11 @@
+Sandbox_EN = {
+    Sandbox_SitAnywhere  = "Sit Anywhere",
+
+	Sandbox_SitAnywhere_RequireAdmminSetup = "Require Admmin Setup",
+	Sandbox_SitAnywhere_DisableLifestyleSitMenu  = "Disable Lifestyle SitMenu",
+
+
+
+}
+
+ 
