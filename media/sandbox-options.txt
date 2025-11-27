@@ -1,11 +1,5 @@
 VERSION = 1,
 
-option SitAnywhere.RequireAdmminSetup
-{
-	type = boolean, default = true,
-	page = SitAnywhere, translation = SitAnywhere_RequireAdmminSetup,
-}
-
 option SitAnywhere.DisableLifestyleSitMenu
 {
 	type = boolean, default = false,
