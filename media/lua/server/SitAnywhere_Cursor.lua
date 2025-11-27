@@ -6,16 +6,23 @@ SitAnywhere = SitAnywhere or {}
 SitAnywhere_Cursor = ISBuildingObject:derive("SitAnywhere_Cursor")
 
 function SitAnywhere_Cursor:create(x, y, z, north, sprite)
-     local pl = self.character
+    local pl = self.character
     if not pl then return end
     if not pl:isAlive() then return end
     ISTimedActionQueue.clear(pl)
     local sq = getWorld():getCell():getGridSquare(x, y, z)
-
+    if self.facing == "N" then
+        y=y-1
+        sq = getCell():getOrCreateGridSquare(x, y, z) 
+    elseif self.facing == "W" then
+        x=x-1
+        sq = getCell():getOrCreateGridSquare(x, y, z) 
+    end
     ISTimedActionQueue.add(ISWalkToTimedAction:new(pl, sq));
-
     ISTimedActionQueue.add(SitAnywhere_Action:new(pl, self.facing))
 end
+
+
 
 function SitAnywhere_Cursor:isValid(sq)
     return sq:TreatAsSolidFloor()
@@ -41,7 +48,7 @@ function SitAnywhere_Cursor:new(character, facing)
     o:setSprite("none")
     o:setNorthSprite("none")
     o.character = character
-    --o.plNum = character:getPlayerNum()
+    o.player = character:getPlayerNum()
     o.facing = facing or "S"
     o.noNeedHammer = true
     o.skipBuildAction = true

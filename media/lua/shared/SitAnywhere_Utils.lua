@@ -97,6 +97,40 @@ end
 Events.OnPlayerUpdate.Remove(SitAnywhere.disabler)
 Events.OnPlayerUpdate.Add(SitAnywhere.disabler)
  ]]
+
+
+function SitAnywhere.clearSitVars()
+    local pl = getPlayer() 
+    local md = pl:getModData()
+    print(pl:getVariableString("SittingToggleStart"))
+    print(pl:getVariableString("SittingToggleLoop"))
+    print(pl:getVariableString("IsSittingInChair"))
+    print(md.IsSittingOnSeat)
+
+    md.IsSittingOnSeat = false
+	pl:clearVariable("SittingToggleStart")
+	pl:clearVariable("SittingToggleLoop")
+	pl:clearVariable("IsSittingInChair")
+end
+Events.OnCreatePlayer.Add(LSIsSitListenerClear)
+
+
+function SitAnywhere.pause(sec, callback)
+    local start = getTimestampMs()
+    local duration = sec * 1000
+
+    local function tick()
+        local now = getTimestampMs()
+        if now - start >= duration then
+            Events.OnTick.Remove(tick)
+            if callback then callback() end
+        end
+    end
+
+    Events.OnTick.Add(tick)
+end
+
+
 function SitAnywhere.getState(pl)
     pl = pl or getPlayer()
     local s = tostring(pl:getCurrentState())
